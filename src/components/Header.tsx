@@ -5,8 +5,12 @@ import ToggleButton from 'react-bootstrap/ToggleButton';
 import { tableDriwingTC } from '../redux/setTable-reducer';
 import { useDispatch } from 'react-redux';
 
+interface IpropsHeader {
+	showTable: string;
+	setShowTable(e: string): void;
+}
 
-const Header = (props: any) => {
+const Header = (props: IpropsHeader) => {
 
 	const dispatch = useDispatch();
 

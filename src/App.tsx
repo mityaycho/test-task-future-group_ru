@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Table } from './components/Table';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { tableDriwingTC, IData } from './redux/setTable-reducer';
+import { useSelector } from 'react-redux';
+import { IData } from './redux/setTable-reducer';
 import { AppStateType } from './redux/store';
 import Header from './components/Header';
 
@@ -17,7 +16,7 @@ function App() {
 
 	return (
 		<div className="App">
-			<Header setShowTable={setShowTable} />
+			<Header setShowTable={setShowTable} showTable={showTable} />
 			{showTable && <Table tableData={tableData} />}
 		</div>
 	);
