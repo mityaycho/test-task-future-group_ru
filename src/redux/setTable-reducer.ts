@@ -22,12 +22,12 @@ export interface IInitialSatate {
 	data: Array<IData>
 };
 
-interface ITableSmall {
-	type: typeof SET_TABLE_SMALL;
+export interface ITableSmall {
+	type: string;
 	data: Array<IData>;
 };
 
-interface ITableLarge {
+export interface ITableLarge {
 	type: typeof SET_TABLE_LARGE;
 	data: Array<IData>;
 };
@@ -55,15 +55,14 @@ export const tableReducer = (state: IInitialSatate = initialSate, action: ITable
 export const tableDriwingTC = (table: string) => async (dispatch: Dispatch) => {
 	try {
 		if (table === 'Small') {
+			
 			const response = await getTableApi.getTableSmall();
 			dispatch(setTableSmalAC(response));
-			console.log(response);
 		} else if (table === 'Large') {
 			const response = await getTableApi.getTableLarge();
 			dispatch(setTableLargeAC(response));
-			console.log(response);
 		}
 	} catch (error) {
 		return error;
 	}
-}
+};

@@ -1,35 +1,34 @@
 import React from 'react';
+import { IData } from '../redux/setTable-reducer';
 
-export const Table = () => {
+interface IProps {
+	tableData: Array<IData>
+}
+
+export const Table = (props: IProps) => {
+
+	let tableData = props.tableData.map(el => (
+	<tr key={el.id}>
+		<th scope="row">{el.id}</th>
+		<td>{el.firstName}</td>
+		<td>{el.lastName}</td>
+		<td>{el.email}</td>
+		<td>{el.phone}</td>
+	</tr>));
+
 	return (
-		<table className="table w-75">
+		<table className="table">
 			<thead className="thead-light">
 				<tr>
-					<th scope="col">#</th>
-					<th scope="col">First</th>
-					<th scope="col">Last</th>
-					<th scope="col">Handle</th>
+					<th scope="col">id</th>
+					<th scope="col">firstName</th>
+					<th scope="col">lastName</th>
+					<th scope="col">Email</th>
+					<th scope="col">Phone</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<th scope="row">1</th>
-					<td>Mark</td>
-					<td>Otto</td>
-					<td>@mdo</td>
-				</tr>
-				<tr>
-					<th scope="row">2</th>
-					<td>Jacob</td>
-					<td>Thornton</td>
-					<td>@fat</td>
-				</tr>
-				<tr>
-					<th scope="row">3</th>
-					<td>Larry</td>
-					<td>the Bird</td>
-					<td>@twitter</td>
-				</tr>
+				{tableData}
 			</tbody>
 		</table>
 	);
