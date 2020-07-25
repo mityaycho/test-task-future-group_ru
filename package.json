@@ -1,7 +1,9 @@
 {
   "name": "test-task-future-group_ru",
   "version": "0.1.0",
-  "private": true,
+	"private": true,
+  "homepage": "https://mityaycho.github.io/test-task-future-group_ru/",
+	
   "dependencies": {
     "-": "0.0.1",
     "@testing-library/jest-dom": "^4.2.4",
