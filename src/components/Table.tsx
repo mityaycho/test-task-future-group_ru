@@ -1,5 +1,6 @@
 import React from 'react';
 import { IData } from '../redux/setTable-reducer';
+import Paginator from './Paginator';
 
 interface IProps {
 	tableData: Array<IData>
@@ -17,7 +18,8 @@ export const Table = (props: IProps) => {
 		</tr>));
 
 	return (
-		<div className="d-flex justify-content-center">
+		<div className="d-flex flex-wrap justify-content-center">
+			<Paginator dataLength={props.tableData.length} />
 			<table className="table w-75 border">
 				<thead className="thead-light">
 					<tr>
