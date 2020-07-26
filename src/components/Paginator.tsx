@@ -3,13 +3,15 @@ import Pagination from 'react-bootstrap/Pagination';
 
 type paginatorType = {
 	dataLength: number;
+	pageSize: number;
+	setPageSize: (e: number) => void;
+	currentPage: number;
+	setCurrentPage: (arg: number) => void;
 }
 
-const Paginator: React.FC<paginatorType> = ({ dataLength }) => {
+const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize, currentPage, setCurrentPage }) => {
 
-	const [pageSize, setPageSize] = useState(5);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [tenPages, setTenPage] = useState(10);
+	const [portionSize, setPortionSize] = useState(10);
 
 	const pages = [];
 	const pagesCount = Math.ceil(dataLength / pageSize);
@@ -19,18 +21,21 @@ const Paginator: React.FC<paginatorType> = ({ dataLength }) => {
 	};
 
 	const pagesData = pages.map(p => {
-		if (pagesCount >= 10) {
+		if (pagesCount >= portionSize + currentPage) {
 			return (
 				<>
-					{p < 11 && <Pagination.Item
+					{p < portionSize + currentPage && <Pagination.Item
 						key={p}
 						active={currentPage === p ? true : false}
 						onClick={() => setCurrentPage(p)}>
 						{p}
 					</Pagination.Item>}
 					{p === pagesCount && <>
-					<Pagination.Ellipsis />
-					<Pagination.Item >{pagesCount}</Pagination.Item>
+						<Pagination.Ellipsis />
+						<Pagination.Item
+							key={pagesCount}
+							active={currentPage === p ? true : false}
+							onClick={() => setCurrentPage(pagesCount)}>{pagesCount}</Pagination.Item>
 					</>}
 				</>
 			)

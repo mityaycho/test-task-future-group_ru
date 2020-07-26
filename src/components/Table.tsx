@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IData } from '../redux/setTable-reducer';
 import Paginator from './Paginator';
 
@@ -8,18 +8,29 @@ interface IProps {
 
 export const Table = (props: IProps) => {
 
-	let tableData = props.tableData.map(el => (
+	const [currentPage, setCurrentPage] = useState(1);
+	const [pageSize, setPageSize] = useState(5);
+	let leftPortionPageNumber = (currentPage - 1) * pageSize + 1;
+  let rightPortionPageNumber = currentPage * pageSize;
+	
+
+	let tableData = props.tableData.filter((p, i) => i >= leftPortionPageNumber && i <= rightPortionPageNumber).map((el, i) => (
 		<tr key={el.id}>
-			<th scope="row">{el.id}</th>
-			<td>{el.firstName}</td>
-			<td>{el.lastName}</td>
-			<td>{el.email}</td>
-			<td>{el.phone}</td>
-		</tr>));
+		<th scope="row">{el.id}</th>
+		<td>{el.firstName}</td>
+		<td>{el.lastName}</td>
+		<td>{el.email}</td>
+		<td>{el.phone}</td>
+	</tr>));
 
 	return (
 		<div className="d-flex flex-wrap justify-content-center">
-			<Paginator dataLength={props.tableData.length} />
+			<Paginator
+				dataLength={props.tableData.length}
+				pageSize={pageSize}
+				setPageSize={setPageSize}
+				currentPage={currentPage}
+				setCurrentPage={setCurrentPage} />
 			<table className="table w-75 border">
 				<thead className="thead-light">
 					<tr>
