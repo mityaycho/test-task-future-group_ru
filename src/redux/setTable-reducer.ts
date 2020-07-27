@@ -1,4 +1,4 @@
-import { SET_TABLE_SMALL, SET_TABLE_LARGE, SET_PRELOADER, setTableSmalAC, setTableLargeAC, setPreloaderAC } from './actions';
+import { SET_TABLE_SMALL, SET_TABLE_LARGE, SET_PRELOADER, setTableSmalAC, setTableLargeAC, setPreloaderAC, SET_SORT_DATA } from './actions';
 import { Dispatch } from 'redux';
 import { getTableApi } from './../api/getTableApi';
 
@@ -40,6 +40,10 @@ export interface ITableLarge {
 	preloader: boolean;
 };
 
+export interface ISortData {
+	type: typeof SET_SORT_DATA;
+	data: Array<IData>;
+}
 const initialSate = {
 	tableHead: ['id', 'firstName', 'lastName', 'Email', 'Phone'],
 	preloader: false,
@@ -60,6 +64,11 @@ export const tableReducer = (state: IInitialSatate = initialSate, action: ITable
 		case SET_PRELOADER:
 			return {
 				...state, preloader: action.preloader
+			}
+		case SET_SORT_DATA:
+			console.log(action.data)
+			return {
+				...state, data: action.data
 			}
 		default:
 			return state;
