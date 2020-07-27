@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { IData } from '../redux/setTable-reducer';
 import Paginator from './Paginator';
+import { useSelector } from 'react-redux';
+import { AppStateType } from '../redux/store';
 
 interface IProps {
 	tableData: Array<IData>
@@ -10,10 +12,13 @@ export const Table = (props: IProps) => {
 
 	const [currentPage, setCurrentPage] = useState(1);
 	const [pageSize, setPageSize] = useState(5);
+	const tableHead = useSelector((store: AppStateType): Array<string> => store.tablePage.tableHead)
 	let leftPortionPageNumber = (currentPage - 1) * pageSize + 1;
   let rightPortionPageNumber = currentPage * pageSize;
 	
 
+	let tableHeadJSX = tableHead.map(el => <th scope="col">{el}</th>);
+	
 	let tableData = props.tableData
 	.filter((p, i) => i >= leftPortionPageNumber && i <= rightPortionPageNumber)
 	.map((el, i) => (
@@ -36,11 +41,7 @@ export const Table = (props: IProps) => {
 			<table className="table border">
 				<thead className="thead-light">
 					<tr>
-						<th scope="col">id</th>
-						<th scope="col">firstName</th>
-						<th scope="col">lastName</th>
-						<th scope="col">Email</th>
-						<th scope="col">Phone</th>
+						{tableHeadJSX}
 					</tr>
 				</thead>
 				<tbody>

@@ -15,7 +15,7 @@ function App() {
 	const [showTable, setShowTable] = useState('');
 	const tableData = useSelector((store: AppStateType): Array<IData> => store.tablePage.data);
 	const preloader = useSelector((store: AppStateType): Array<IData> => store.tablePage.preloader);
-	console.log(preloader)
+	
 
 	return (
 		<div className="container App">

@@ -23,6 +23,7 @@ export interface ITablePreloader {
 	preloader: boolean;
 }
 export interface IInitialSatate {
+	tableHead: Array<string>;
 	preloader: boolean;
 	data: Array<IData>;
 };
@@ -40,6 +41,7 @@ export interface ITableLarge {
 };
 
 const initialSate = {
+	tableHead: ['id', 'firstName', 'lastName', 'Email', 'Phone'],
 	preloader: false,
 	data: []
 };
@@ -68,12 +70,12 @@ export const tableDriwingTC = (table: string) => async (dispatch: Dispatch) => {
 	try {
 		if (table === 'Small') {
 
+			dispatch(setPreloaderAC(true));
 			const response = await getTableApi.getTableSmall();
-			response && dispatch(setPreloaderAC(true));
 			dispatch(setTableSmalAC(response, false));
 		} else if (table === 'Large') {
+			dispatch(setPreloaderAC(true));
 			const response = await getTableApi.getTableLarge();
-			response && dispatch(setPreloaderAC(true));
 			dispatch(setTableLargeAC(response, false));
 		}
 	} catch (error) {

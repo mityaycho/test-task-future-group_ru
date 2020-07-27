@@ -26,7 +26,6 @@ const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize,
 	}
 
 	const pagesData = pages
-		// .filter(p => p >= leftPortionPageNumber && p <= rightPortionPageNumber)
 		.map(p => {
 			if (allPages >= portionSize) {
 
@@ -39,19 +38,12 @@ const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize,
 								setCurrentPage(p);
 								if (p === portionSize && p !== allPages) {
 									setStartPortion(startPortion + 9);
-									setPortionSize(portionSize + 9);
+								setPortionSize(portionSize + 9);
 								}
 							}}>
 							{p}
 						</Pagination.Item>
 
-						{/* {allPages && <>
-							<Pagination.Ellipsis />
-							<Pagination.Item
-								key={allPages}
-								active={currentPage === p ? true : false}
-								onClick={() => setCurrentPage(allPages)}>{allPages}</Pagination.Item>
-						</>} */}
 					</>
 				)
 			} else {
