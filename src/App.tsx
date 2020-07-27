@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { IData } from './redux/setTable-reducer';
 import { AppStateType } from './redux/store';
 import Header from './components/Header';
+import logo from './logo.svg';
 
 
 
@@ -13,11 +14,16 @@ function App() {
 
 	const [showTable, setShowTable] = useState('');
 	const tableData = useSelector((store: AppStateType): Array<IData> => store.tablePage.data);
+	const preloader = useSelector((store: AppStateType): Array<IData> => store.tablePage.preloader);
+	console.log(preloader)
 
 	return (
-		<div className="App">
+		<div className="container App">
 			<Header setShowTable={setShowTable} showTable={showTable} />
-			{showTable && <Table tableData={tableData} />}
+			{preloader ?
+				<img src={logo} className="preloader-logo" alt="logo" /> :
+				showTable && <Table tableData={tableData} />
+			}
 		</div>
 	);
 };

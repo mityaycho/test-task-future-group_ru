@@ -14,7 +14,9 @@ export const Table = (props: IProps) => {
   let rightPortionPageNumber = currentPage * pageSize;
 	
 
-	let tableData = props.tableData.filter((p, i) => i >= leftPortionPageNumber && i <= rightPortionPageNumber).map((el, i) => (
+	let tableData = props.tableData
+	.filter((p, i) => i >= leftPortionPageNumber && i <= rightPortionPageNumber)
+	.map((el, i) => (
 		<tr key={el.id}>
 		<th scope="row">{el.id}</th>
 		<td>{el.firstName}</td>
@@ -24,14 +26,14 @@ export const Table = (props: IProps) => {
 	</tr>));
 
 	return (
-		<div className="d-flex flex-wrap justify-content-center">
+		<div>
 			<Paginator
 				dataLength={props.tableData.length}
 				pageSize={pageSize}
 				setPageSize={setPageSize}
 				currentPage={currentPage}
 				setCurrentPage={setCurrentPage} />
-			<table className="table w-75 border">
+			<table className="table border">
 				<thead className="thead-light">
 					<tr>
 						<th scope="col">id</th>

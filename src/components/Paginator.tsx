@@ -12,48 +12,63 @@ type paginatorType = {
 const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize, currentPage, setCurrentPage }) => {
 
 	const [portionSize, setPortionSize] = useState(10);
+	const [startPortion, setStartPortion] = useState(1);
 
 	const pages = [];
-	const pagesCount = Math.ceil(dataLength / pageSize);
+	const allPages = Math.ceil(dataLength / pageSize);
 
-	for (let i = 1; i <= pagesCount; i++) {
+	for (let i = startPortion; i <= portionSize; i++) {
 		pages.push(i);
 	};
 
-	const pagesData = pages.map(p => {
-		if (pagesCount >= portionSize + currentPage) {
-			return (
-				<>
-					{p < portionSize + currentPage && <Pagination.Item
-						key={p}
-						active={currentPage === p ? true : false}
-						onClick={() => setCurrentPage(p)}>
-						{p}
-					</Pagination.Item>}
-					{p === pagesCount && <>
-						<Pagination.Ellipsis />
+	if (allPages < portionSize) {
+		setPortionSize(allPages);
+	}
+
+	const pagesData = pages
+		// .filter(p => p >= leftPortionPageNumber && p <= rightPortionPageNumber)
+		.map(p => {
+			if (allPages >= portionSize) {
+
+				return (
+					<>
 						<Pagination.Item
-							key={pagesCount}
+							key={p}
 							active={currentPage === p ? true : false}
-							onClick={() => setCurrentPage(pagesCount)}>{pagesCount}</Pagination.Item>
-					</>}
-				</>
-			)
-		} else {
-			return <Pagination.Item
-				key={p}
-				active={currentPage === p ? true : false}
-				onClick={() => setCurrentPage(p)}>
-				{p}
-			</Pagination.Item>
-		}
-	});
+							onClick={() => {
+								setCurrentPage(p);
+								if (p === portionSize && p !== allPages) {
+									setStartPortion(startPortion + 9);
+									setPortionSize(portionSize + 9);
+								}
+							}}>
+							{p}
+						</Pagination.Item>
+
+						{/* {allPages && <>
+							<Pagination.Ellipsis />
+							<Pagination.Item
+								key={allPages}
+								active={currentPage === p ? true : false}
+								onClick={() => setCurrentPage(allPages)}>{allPages}</Pagination.Item>
+						</>} */}
+					</>
+				)
+			} else {
+				return <Pagination.Item
+					key={p}
+					active={currentPage === p ? true : false}
+					onClick={() => setCurrentPage(p)}>
+					{p}
+				</Pagination.Item>
+			}
+		});
 
 	const setNumberCallback = useCallback((val) => setCurrentPage(val),
 		[setCurrentPage]);
 
 	return (
-		<div className="d-flex">
+		<div className="d-flex justify-content-end mr-5">
 			<div>
 				<select defaultValue={5} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
 					setPageSize(+e.target.value);
@@ -66,13 +81,38 @@ const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize,
 			</div>
 
 			<Pagination>
-				<Pagination.First onClick={() => currentPage > 1 && setNumberCallback(1)} />
-				<Pagination.Prev onClick={() => currentPage > 1 && setNumberCallback(currentPage - 1)} />
+				<Pagination.First onClick={() => {
+					currentPage > 1 && setNumberCallback(1);
+					setStartPortion(1);
+					setPortionSize(10);
+				}} />
+				<Pagination.Prev onClick={() => {
+					if (currentPage > 1 && currentPage === startPortion) {
+						setStartPortion(startPortion - 9);
+						setPortionSize(portionSize - 9);
+					}
+					currentPage > 1 && setNumberCallback(currentPage - 1);
+				}} />
 
 				{pagesData}
 
-				<Pagination.Next onClick={() => currentPage < pagesCount && setNumberCallback(currentPage + 1)} />
-				<Pagination.Last onClick={() => currentPage < pagesCount && setNumberCallback(pagesCount)} />
+				<Pagination.Next onClick={() => {
+					if (allPages > portionSize && currentPage === portionSize && currentPage !== allPages) {
+						setStartPortion(startPortion + 9);
+						setPortionSize(portionSize + 9);
+					} else if (allPages > portionSize && currentPage === allPages - 1) {
+						setStartPortion(allPages - 9);
+						setPortionSize(allPages);
+					}
+					currentPage < allPages && setNumberCallback(currentPage + 1);
+				}} />
+				<Pagination.Last onClick={() => {
+					if (allPages > portionSize) {
+						currentPage < allPages && setNumberCallback(allPages);
+						setStartPortion(allPages - 9);
+						setPortionSize(allPages);
+					}
+				}} />
 			</Pagination>
 		</div>
 	);
