@@ -3,6 +3,7 @@ import { IData } from '../redux/setTable-reducer';
 import Paginator from './Paginator';
 import { useSelector } from 'react-redux';
 import { AppStateType } from '../redux/store';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IProps {
 	tableData: Array<IData>
@@ -17,12 +18,12 @@ export const Table = (props: IProps) => {
   let rightPortionPageNumber = currentPage * pageSize;
 	
 
-	let tableHeadJSX = tableHead.map(el => <th scope="col">{el}</th>);
+	let tableHeadJSX = tableHead.map(el => <th key={uuidv4()} scope="col">{el}</th>);
 	
 	let tableData = props.tableData
 	.filter((p, i) => i >= leftPortionPageNumber && i <= rightPortionPageNumber)
 	.map((el, i) => (
-		<tr key={el.id}>
+		<tr key={uuidv4()}>
 		<th scope="row">{el.id}</th>
 		<td>{el.firstName}</td>
 		<td>{el.lastName}</td>

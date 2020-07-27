@@ -1,5 +1,7 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import Pagination from 'react-bootstrap/Pagination';
+import { v4 as uuidv4 } from 'uuid';
+
 
 type paginatorType = {
 	dataLength: number;
@@ -30,25 +32,23 @@ const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize,
 			if (allPages >= portionSize) {
 
 				return (
-					<>
-						<Pagination.Item
-							key={p}
-							active={currentPage === p ? true : false}
-							onClick={() => {
-								setCurrentPage(p);
-								if (p === portionSize && p !== allPages) {
-									setStartPortion(startPortion + 9);
+					<Pagination.Item
+						key={uuidv4()}
+						active={currentPage === p ? true : false}
+						onClick={() => {
+							setCurrentPage(p);
+							if (p === portionSize && p !== allPages) {
+								setStartPortion(startPortion + 9);
 								setPortionSize(portionSize + 9);
-								}
-							}}>
-							{p}
-						</Pagination.Item>
+							}
+						}}>
+						{p}
+					</Pagination.Item>
 
-					</>
 				)
 			} else {
 				return <Pagination.Item
-					key={p}
+					key={uuidv4()}
 					active={currentPage === p ? true : false}
 					onClick={() => setCurrentPage(p)}>
 					{p}
@@ -56,8 +56,7 @@ const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize,
 			}
 		});
 
-	const setNumberCallback = useCallback((val) => setCurrentPage(val),
-		[setCurrentPage]);
+	const setNumberCallback = useCallback((val) => setCurrentPage(val), [setCurrentPage]);
 
 	return (
 		<div className="d-flex justify-content-end mr-5">
@@ -78,6 +77,7 @@ const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize,
 					setStartPortion(1);
 					setPortionSize(10);
 				}} />
+
 				<Pagination.Prev onClick={() => {
 					if (currentPage > 1 && currentPage === startPortion) {
 						setStartPortion(startPortion - 9);
@@ -98,6 +98,7 @@ const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize,
 					}
 					currentPage < allPages && setNumberCallback(currentPage + 1);
 				}} />
+
 				<Pagination.Last onClick={() => {
 					if (allPages > portionSize) {
 						currentPage < allPages && setNumberCallback(allPages);
