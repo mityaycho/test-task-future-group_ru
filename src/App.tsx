@@ -32,12 +32,18 @@ function App() {
 			</div>}
 
 
-			{tableWatch === 'material-table' && <MaterialTableJSX />}
+			{tableWatch === 'material-table' &&
+			<div>
+			{preloader ?
+				<img src={logo} className="preloader-logo mt-5" alt="logo" /> :
+				<MaterialTableJSX />
+			}
+		</div>}
 
 			{tableWatch === 'custom-table' &&
 				<div>
 					{preloader ?
-						<img src={logo} className="preloader-logo" alt="logo" /> :
+						<img src={logo} className="preloader-logo mt-5" alt="logo" /> :
 						showTable && <Table tableData={tableData} />
 					}
 				</div>

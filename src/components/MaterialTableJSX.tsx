@@ -21,15 +21,7 @@ import { useSelector } from 'react-redux';
 
 
 
-
-
-
-interface TableState {
-	columns: Array<object>;
-	data: Array<object>;
-};
-
-export default function MaterialTableJSX() {
+const MaterialTableJSX = () => {
 
 	const tableIcons: any = {
 		Add: forwardRef((props: any, ref: any) => <AddBox {...props} ref={ref} />),
@@ -53,61 +45,57 @@ export default function MaterialTableJSX() {
 
 	const tableData = useSelector((state: AppStateType) => state.tablePage.data);
 	const [data, setData]: any = useState(tableData);
-
-	const [state, setState] = useState<TableState>({
-		columns: [
-			{ title: 'id', field: 'id' },
-			{ title: 'firstName', field: 'firstName' },
-			{ title: 'lastName', field: 'lastName' },
-			{ title: 'email', field: 'email' },
-			{ title: 'phone', field: 'phone' }
-		],
-		data: data
-	});
-
+	
 	return (
 		<MaterialTable
 			icons={tableIcons}
 			title=""
-			columns={state.columns}
+			columns={[
+				{ title: 'id', field: 'id' },
+				{ title: 'firstName', field: 'firstName' },
+				{ title: 'lastName', field: 'lastName' },
+				{ title: 'email', field: 'email' },
+				{ title: 'phone', field: 'phone' }
+			]}
 			options={{
 				search: true,
-				sorting: true,
-				filtering: true
+				sorting: true
 			}}
-			data={state.data}
+			data={data}
 			editable={{
-				onRowAdd: newData =>
-					new Promise((resolve, reject) => {
-						setTimeout(() => {
-							setData([...data, newData]);
+        onRowAdd: newData =>
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              setData([...data, newData]);
+              
+              resolve();
+            }, 1000)
+          }),
+        onRowUpdate: (newData: any, oldData: any) =>
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              const dataUpdate = [...data];
+              const index = oldData.tableData.id;
+              dataUpdate[index] = newData;
+              setData([...dataUpdate]);
 
-							resolve();
-						}, 1000)
-					}),
-				onRowUpdate: (newData: any, oldData: any) =>
-					new Promise((resolve, reject) => {
-						setTimeout(() => {
-							const dataUpdate = [...data];
-							const index = oldData.id;
-							dataUpdate[index] = newData;
-							setData([...dataUpdate]);
-							debugger
-							resolve();
-						}, 1000)
-					}),
-				onRowDelete: (oldData: any) =>
-					new Promise((resolve, reject) => {
-						setTimeout(() => {
-							const dataDelete = [...data];
-							const index = oldData.id;
-							dataDelete.splice(index, 1);
-							setData([...dataDelete]);
-
-							resolve()
-						}, 1000)
-					}),
-			}}
+              resolve();
+            }, 1000)
+          }),
+        onRowDelete: (oldData: any) =>
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              const dataDelete = [...data];
+              const index = oldData.tableData.id;
+              dataDelete.splice(index, 1);
+              setData([...dataDelete]);
+              
+              resolve()
+            }, 1000)
+          }),
+      }}
 		/>
 	);
 };
+
+export default MaterialTableJSX;

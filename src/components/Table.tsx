@@ -87,21 +87,47 @@ export const Table = (props: IProps) => {
 			<div className="d-flex p-2">
 				<button
 					type="button"
-					className="btn btn-secondary btn-lg mr-auto"
-					onClick={addData}>Add</button>
+					className="btn btn-secondary btn-sm mb-auto mr-auto ml-5 pl-3 pr-3"
+					onClick={addData}>Add data</button>
 				{newData &&
-					<form onSubmit={handleSubmit(onSubmit)} className="add-new-data col">
-						<input name="id" ref={register({ required: true })} />
+				
+					<form onSubmit={handleSubmit(onSubmit)} className="form-col col-md-3">
+						<input 
+						className="form-control m-1" 
+						placeholder="id" 
+						name="id" 
+						ref={register({ required: true })} />
 						{errors.firstName && "add id"}
-						<input name="firstName" ref={register({ required: true })} />
+
+						<input 
+						className="form-control m-1" 
+						placeholder="firstName" 
+						name="firstName" 
+						ref={register({ required: true })} />
 						{errors.firstName && "add firstName"}
-						<input name="lastName" ref={register({ required: true })} />
+
+						<input 
+						className="form-control m-1" 
+						placeholder="lastName" 
+						name="lastName" 
+						ref={register({ required: true })} />
 						{errors.firstName && "add lastName"}
-						<input name="email" ref={register({ required: true })} />
+
+						<input 
+						className="form-control m-1" 
+						placeholder="email" 
+						name="email" 
+						ref={register({ required: true })} />
 						{errors.firstName && "add email"}
-						<input name="phone" ref={register({ required: true })} />
+
+						<input 
+						className="form-control m-1" 
+						placeholder="phone" 
+						name="phone" 
+						ref={register({ required: true })} />
 						{errors.firstName && "add phone"}
-						<input type="submit" />
+
+						<input className="btn btn-secondary btn-sm" type="submit" />
 					</form>}
 				<Paginator
 					dataLength={props.tableData.length}
