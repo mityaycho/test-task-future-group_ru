@@ -1,24 +1,66 @@
 import React, { useState } from 'react';
-import { IData, ITableHead } from '../redux/setTable-reducer';
+import { IData } from '../redux/setTable-reducer';
 import Paginator from './Paginator';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppStateType } from '../redux/store';
 import { v4 as uuidv4 } from 'uuid';
-import { setSortDataAC } from '../redux/actions';
+import { setSortDataAC, setNewDataAC } from '../redux/actions';
+import { useForm } from "react-hook-form";
 
 
 interface IProps {
-	tableData: Array<IData>
-}
+	tableData: Array<IData>;
+};
 
 export const Table = (props: IProps) => {
 
 	const dispatch = useDispatch();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [pageSize, setPageSize] = useState(5);
-	const tableHead = useSelector((state: AppStateType): Array<ITableHead> => state.tablePage.tableHead)
+	const [watchInfoBool, setWatchInfoBool] = useState(false);
+	const [address, setAddress] = useState<IData>({} as IData);
+	const [newData, setNewData] = useState(false);
+
+	const { register, errors, handleSubmit } = useForm();
+
+	const onSubmit = (data: any) => {
+		dispatch(setNewDataAC({
+			...data, address: {
+				streetAddress: '',
+				city: '',
+				state: '',
+				zip: ''
+			},
+			description: ''
+		}));
+	}
+
+	const tableHead = useSelector((state: AppStateType) => state.tablePage.tableHead)
 	let leftPortionPageNumber = (currentPage - 1) * pageSize + 1;
 	let rightPortionPageNumber = currentPage * pageSize;
+
+
+	const tableHeadSort = (e: any) => {
+		const dataValue = e.target.dataset.value as keyof IData;
+		const dataBool = e.target.dataset.bool;
+
+		let sortData = props.tableData.sort((a, b) => dataBool === 'false' ?
+			a[dataValue] > b[dataValue] ? 1 : -1 :
+			b[dataValue] > a[dataValue] ? 1 : -1);
+		let sortTAbleHead = tableHead.map(({ th, sort }) => th === dataValue && !sort ? { th, sort: true } : { th, sort: false });
+		dispatch(setSortDataAC(sortData, sortTAbleHead));
+	};
+
+	const watchInfo = (e: any) => {
+		const dataId = e.currentTarget.dataset.id;
+		const watchAddress: any = props.tableData.find(el => +dataId === el.id);
+		setAddress(watchAddress);
+		setWatchInfoBool(true);
+	}
+
+	const addData = (e: any) => {
+		newData ? setNewData(false) : setNewData(true);
+	}
 
 
 	let tableHeadJSX = tableHead.map(({ th, sort }) => <th
@@ -30,8 +72,8 @@ export const Table = (props: IProps) => {
 
 	let tableData = props.tableData
 		.filter((p, i) => i >= leftPortionPageNumber && i <= rightPortionPageNumber)
-		.map((el, i) => (
-			<tr key={uuidv4()}>
+		.map(el => (
+			<tr key={uuidv4()} data-id={el.id} onClick={watchInfo}>
 				<th scope="row">{el.id}</th>
 				<td>{el.firstName}</td>
 				<td>{el.lastName}</td>
@@ -39,34 +81,34 @@ export const Table = (props: IProps) => {
 				<td>{el.phone}</td>
 			</tr>));
 
-	const tableHeadSort = (e: any) => {
-		const dataValue = e.target.dataset.value as keyof IData;
-		const dataBool = e.target.dataset.bool;
-
-		let sortData = props.tableData.sort((a, b) => dataBool ?
-		a[dataValue] > b[dataValue] ? 1 : -1 :
-		b[dataValue] > a[dataValue] ? 1 : -1);
-		let sortTAbleHead = tableHead.map(({ th, sort }) => th === dataValue && !sort ? { th, sort: true } : { th, sort: false });
-		dispatch(setSortDataAC(sortData, sortTAbleHead));
-	};
-
-	const addData = (e: any) => {
-		
-	}
 
 	return (
 		<div>
 			<div className="d-flex p-2">
-			<button 
-			type="button" 
-			className="btn btn-secondary btn-sm pl-5 pr-5 mr-auto"
-			onClick={addData}>Add</button>
-			<Paginator
-				dataLength={props.tableData.length}
-				pageSize={pageSize}
-				setPageSize={setPageSize}
-				currentPage={currentPage}
-				setCurrentPage={setCurrentPage} />
+				<button
+					type="button"
+					className="btn btn-secondary btn-lg mr-auto"
+					onClick={addData}>Add</button>
+				{newData &&
+					<form onSubmit={handleSubmit(onSubmit)} className="add-new-data col">
+						<input name="id" ref={register({ required: true })} />
+						{errors.firstName && "add id"}
+						<input name="firstName" ref={register({ required: true })} />
+						{errors.firstName && "add firstName"}
+						<input name="lastName" ref={register({ required: true })} />
+						{errors.firstName && "add lastName"}
+						<input name="email" ref={register({ required: true })} />
+						{errors.firstName && "add email"}
+						<input name="phone" ref={register({ required: true })} />
+						{errors.firstName && "add phone"}
+						<input type="submit" />
+					</form>}
+				<Paginator
+					dataLength={props.tableData.length}
+					pageSize={pageSize}
+					setPageSize={setPageSize}
+					currentPage={currentPage}
+					setCurrentPage={setCurrentPage} />
 			</div>
 
 			<table className="table border">
@@ -79,6 +121,19 @@ export const Table = (props: IProps) => {
 					{tableData}
 				</tbody>
 			</table>
+			{watchInfoBool &&
+				<div className="col">
+					<div>Выбран пользователь <b>{address.firstName}&nbsp;{address.lastName}</b></div>
+					<div>Описание:
+						<textarea>
+							{address.description}
+						</textarea>
+					</div>
+					<div>Адрес проживания: <b>{address.address.streetAddress}</b></div>
+					<div>Город: <b>{address.address.city}</b></div>
+					<div>Провинция/штат: <b>{address.address.state}</b></div>
+					<div>Индекс: <b>{address.address.zip}</b></div>
+				</div>}
 		</div>
 	);
 };

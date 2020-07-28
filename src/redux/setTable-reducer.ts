@@ -1,4 +1,4 @@
-import { SET_TABLE_SMALL, SET_TABLE_LARGE, SET_PRELOADER, setTableSmalAC, setTableLargeAC, setPreloaderAC, SET_SORT_DATA } from './actions';
+import { SET_TABLE_SMALL, SET_TABLE_LARGE, SET_PRELOADER, setTableSmalAC, setTableLargeAC, setPreloaderAC, SET_SORT_DATA, SET_NEW_DATA } from './actions';
 import { Dispatch } from 'redux';
 import { getTableApi } from './../api/getTableApi';
 
@@ -27,11 +27,7 @@ export interface ITablePreloader {
 	type: typeof SET_PRELOADER;
 	preloader: boolean;
 }
-export interface IInitialSatate {
-	tableHead: Array<ITableHead>;
-	preloader: boolean;
-	data: Array<IData>;
-};
+
 
 export interface ITableSmall {
 	type: typeof SET_TABLE_SMALL;
@@ -49,7 +45,13 @@ export interface ISortData {
 	type: typeof SET_SORT_DATA;
 	data: Array<IData>;
 	tableHead: Array<ITableHead>;
-}
+};
+
+export interface ISetNewData {
+	type: typeof SET_NEW_DATA;
+	data: IData;
+};
+
 const initialSate = {
 	tableHead: [
 		{ th: 'id', sort: false },
@@ -57,13 +59,14 @@ const initialSate = {
 		{ th: 'lastName', sort: false },
 		{ th: 'Email', sort: false },
 		{ th: 'Phone', sort: false }
-	],
+	] as Array<ITableHead>,
 	preloader: false,
-	data: []
+	data: [] as Array<IData>
 };
 
+export type IInitialSatate = typeof initialSate
 
-export const tableReducer = (state: IInitialSatate = initialSate, action: ITableSmall | ITableLarge | ITablePreloader | ISortData) => {
+export const tableReducer = (state = initialSate, action: ITableSmall | ITableLarge | ITablePreloader | ISortData | ISetNewData): IInitialSatate => {
 	switch (action.type) {
 		case SET_TABLE_SMALL:
 			return {
@@ -80,6 +83,10 @@ export const tableReducer = (state: IInitialSatate = initialSate, action: ITable
 		case SET_SORT_DATA:
 			return {
 				...state, data: action.data, tableHead: action.tableHead
+			}
+		case SET_NEW_DATA:
+			return {
+				...state, data: [action.data, ...state.data]
 			}
 		default:
 			return state;

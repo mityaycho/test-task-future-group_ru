@@ -61,3 +61,7 @@ h1 {
 .table-head {
 	cursor: pointer;
 }
+
+.add-new-data {
+	position: absolute;
+}
