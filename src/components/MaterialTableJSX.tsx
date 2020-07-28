@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import MaterialTable from 'material-table';
 
 import AddBox from '@material-ui/icons/AddBox';
@@ -52,6 +52,7 @@ export default function MaterialTableJSX() {
 	};
 
 	const tableData = useSelector((state: AppStateType) => state.tablePage.data);
+	const [data, setData]: any = useState(tableData);
 
 	const [state, setState] = useState<TableState>({
 		columns: [
@@ -61,9 +62,9 @@ export default function MaterialTableJSX() {
 			{ title: 'email', field: 'email' },
 			{ title: 'phone', field: 'phone' }
 		],
-		data: tableData
+		data: data
 	});
-	
+
 	return (
 		<MaterialTable
 			icons={tableIcons}
@@ -71,9 +72,42 @@ export default function MaterialTableJSX() {
 			columns={state.columns}
 			options={{
 				search: true,
-				sorting: true
+				sorting: true,
+				filtering: true
 			}}
 			data={state.data}
+			editable={{
+				onRowAdd: newData =>
+					new Promise((resolve, reject) => {
+						setTimeout(() => {
+							setData([...data, newData]);
+
+							resolve();
+						}, 1000)
+					}),
+				onRowUpdate: (newData: any, oldData: any) =>
+					new Promise((resolve, reject) => {
+						setTimeout(() => {
+							const dataUpdate = [...data];
+							const index = oldData.id;
+							dataUpdate[index] = newData;
+							setData([...dataUpdate]);
+							debugger
+							resolve();
+						}, 1000)
+					}),
+				onRowDelete: (oldData: any) =>
+					new Promise((resolve, reject) => {
+						setTimeout(() => {
+							const dataDelete = [...data];
+							const index = oldData.id;
+							dataDelete.splice(index, 1);
+							setData([...dataDelete]);
+
+							resolve()
+						}, 1000)
+					}),
+			}}
 		/>
 	);
 };
