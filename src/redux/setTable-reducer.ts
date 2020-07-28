@@ -18,18 +18,23 @@ export type IData = {
 	description: string;
 };
 
+export type ITableHead = {
+	th: string;
+	sort: boolean;
+}
+
 export interface ITablePreloader {
 	type: typeof SET_PRELOADER;
 	preloader: boolean;
 }
 export interface IInitialSatate {
-	tableHead: Array<string>;
+	tableHead: Array<ITableHead>;
 	preloader: boolean;
 	data: Array<IData>;
 };
 
 export interface ITableSmall {
-	type: string;
+	type: typeof SET_TABLE_SMALL;
 	data: Array<IData>;
 	preloader: boolean;
 };
@@ -43,15 +48,22 @@ export interface ITableLarge {
 export interface ISortData {
 	type: typeof SET_SORT_DATA;
 	data: Array<IData>;
+	tableHead: Array<ITableHead>;
 }
 const initialSate = {
-	tableHead: ['id', 'firstName', 'lastName', 'Email', 'Phone'],
+	tableHead: [
+		{ th: 'id', sort: false },
+		{ th: 'firstName', sort: false },
+		{ th: 'lastName', sort: false },
+		{ th: 'Email', sort: false },
+		{ th: 'Phone', sort: false }
+	],
 	preloader: false,
 	data: []
 };
 
 
-export const tableReducer = (state: IInitialSatate = initialSate, action: ITableSmall | ITableLarge | any) => {
+export const tableReducer = (state: IInitialSatate = initialSate, action: ITableSmall | ITableLarge | ITablePreloader | ISortData) => {
 	switch (action.type) {
 		case SET_TABLE_SMALL:
 			return {
@@ -66,9 +78,8 @@ export const tableReducer = (state: IInitialSatate = initialSate, action: ITable
 				...state, preloader: action.preloader
 			}
 		case SET_SORT_DATA:
-			console.log(action.data)
 			return {
-				...state, data: action.data
+				...state, data: action.data, tableHead: action.tableHead
 			}
 		default:
 			return state;

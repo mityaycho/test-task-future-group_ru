@@ -3,7 +3,6 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Table } from './components/Table';
 import { useSelector } from 'react-redux';
-import { IData } from './redux/setTable-reducer';
 import { AppStateType } from './redux/store';
 import Header from './components/Header';
 import logo from './logo.svg';
@@ -13,9 +12,7 @@ import logo from './logo.svg';
 function App() {
 
 	const [showTable, setShowTable] = useState('');
-	const tableData = useSelector((store: AppStateType): Array<IData> => store.tablePage.data);
-	const preloader = useSelector((store: AppStateType): Array<IData> => store.tablePage.preloader);
-	
+	const { data: tableData, preloader } = useSelector((state: AppStateType) => state.tablePage);
 
 	return (
 		<div className="container App">

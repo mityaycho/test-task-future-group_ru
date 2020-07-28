@@ -59,7 +59,7 @@ const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize,
 	const setNumberCallback = useCallback((val) => setCurrentPage(val), [setCurrentPage]);
 
 	return (
-		<div className="d-flex justify-content-end mr-5">
+		<div className="d-flex mr-5">
 			<div>
 				<select defaultValue={5} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
 					setPageSize(+e.target.value);

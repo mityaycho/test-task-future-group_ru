@@ -57,3 +57,7 @@ h1 {
 		animation: App-logo-spin infinite 0.7s linear;
   }
 }
+
+.table-head {
+	cursor: pointer;
+}
