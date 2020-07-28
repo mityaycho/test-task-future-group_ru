@@ -18,6 +18,8 @@ function App() {
 
 	return (
 		<div className="container App">
+			<Header setShowTable={setShowTable} showTable={showTable} />
+
 			<button
 				type="button"
 				className="btn btn-secondary btn-sm m-2"
@@ -31,7 +33,6 @@ function App() {
 
 			{tableWatch === 'custom-table' &&
 				<div>
-					<Header setShowTable={setShowTable} showTable={showTable} />
 					{preloader ?
 						<img src={logo} className="preloader-logo" alt="logo" /> :
 						showTable && <Table tableData={tableData} />

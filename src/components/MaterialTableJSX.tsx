@@ -16,6 +16,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import { AppStateType } from '../redux/store';
+import { useSelector } from 'react-redux';
 
 
 
@@ -49,6 +51,8 @@ export default function MaterialTableJSX() {
 		ViewColumn: forwardRef((props: any, ref: any) => <ViewColumn {...props} ref={ref} />)
 	};
 
+	const tableData = useSelector((state: AppStateType) => state.tablePage.data);
+
 	const [state, setState] = useState<TableState>({
 		columns: [
 			{ title: 'id', field: 'id' },
@@ -57,8 +61,7 @@ export default function MaterialTableJSX() {
 			{ title: 'email', field: 'email' },
 			{ title: 'phone', field: 'phone' }
 		],
-		// data: tableDrawing,
-		data: []
+		data: tableData
 	});
 	
 	return (
@@ -70,60 +73,7 @@ export default function MaterialTableJSX() {
 				search: true,
 				sorting: true
 			}}
-			// data={state.data}
-			data={query =>
-				new Promise((resolve, reject) => {
-					let url = 'http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}';
-					
-					fetch(url)
-						.then(response => response.json())
-						.then(result => {
-							debugger
-						resolve({
-							data: result,
-							page: result.page - 1,
-							totalCount: result.cardPacksTotalCount
-						});
-					})
-				})
-			}
-			editable={{
-				onRowAdd: (newData) =>
-					new Promise((resolve) => {
-						setTimeout(() => {
-							resolve();
-							setState((prevState) => {
-								const data = [...prevState.data];
-								data.push(newData);
-								return { ...prevState, data };
-							});
-						}, 600);
-					}),
-				onRowUpdate: (newData, oldData) =>
-					new Promise((resolve) => {
-						setTimeout(() => {
-							resolve();
-							if (oldData) {
-								setState((prevState) => {
-									const data = [...prevState.data];
-									data[data.indexOf(oldData)] = newData;
-									return { ...prevState, data };
-								});
-							}
-						}, 600);
-					}),
-				onRowDelete: (oldData) =>
-					new Promise((resolve) => {
-						setTimeout(() => {
-							resolve();
-							setState((prevState) => {
-								const data = [...prevState.data];
-								data.splice(data.indexOf(oldData), 1);
-								return { ...prevState, data };
-							});
-						}, 600);
-					}),
-			}}
+			data={state.data}
 		/>
 	);
 };

@@ -35,7 +35,7 @@ export const Table = (props: IProps) => {
 		}));
 	}
 
-	const tableHead = useSelector((state: AppStateType) => state.tablePage.tableHead)
+	const tableHead = useSelector((state: AppStateType) => state.tablePage.tableHead);
 	let leftPortionPageNumber = (currentPage - 1) * pageSize + 1;
 	let rightPortionPageNumber = currentPage * pageSize;
 
