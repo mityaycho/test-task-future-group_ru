@@ -25,7 +25,8 @@ export const Table = (props: IProps) => {
 
 	const onSubmit = (data: any) => {
 		dispatch(setNewDataAC({
-			...data, address: {
+			...data,
+			address: {
 				streetAddress: '',
 				city: '',
 				state: '',
@@ -33,7 +34,7 @@ export const Table = (props: IProps) => {
 			},
 			description: ''
 		}));
-	}
+	};
 
 	const tableHead = useSelector((state: AppStateType) => state.tablePage.tableHead);
 	let leftPortionPageNumber = (currentPage - 1) * pageSize + 1;
@@ -48,6 +49,7 @@ export const Table = (props: IProps) => {
 			a[dataValue] > b[dataValue] ? 1 : -1 :
 			b[dataValue] > a[dataValue] ? 1 : -1);
 		let sortTAbleHead = tableHead.map(({ th, sort }) => th === dataValue && !sort ? { th, sort: true } : { th, sort: false });
+
 		dispatch(setSortDataAC(sortData, sortTAbleHead));
 	};
 
@@ -56,11 +58,11 @@ export const Table = (props: IProps) => {
 		const watchAddress: any = props.tableData.find(el => +dataId === el.id);
 		setAddress(watchAddress);
 		setWatchInfoBool(true);
-	}
+	};
 
 	const addData = (e: any) => {
 		newData ? setNewData(false) : setNewData(true);
-	}
+	};
 
 
 	let tableHeadJSX = tableHead.map(({ th, sort }) => <th
@@ -70,7 +72,7 @@ export const Table = (props: IProps) => {
 		data-value={th}
 		data-bool={sort}>{th}&nbsp;{sort ? '▲' : '▼'}</th>);
 
-	let tableData = props.tableData
+	let tableDataJSX = props.tableData
 		.filter((p, i) => i >= leftPortionPageNumber && i <= rightPortionPageNumber)
 		.map(el => (
 			<tr key={uuidv4()} data-id={el.id} onClick={watchInfo}>
@@ -89,46 +91,47 @@ export const Table = (props: IProps) => {
 					type="button"
 					className="btn btn-secondary btn-sm mb-auto mr-auto ml-5 pl-3 pr-3"
 					onClick={addData}>Add data</button>
+
 				{newData &&
-				
 					<form onSubmit={handleSubmit(onSubmit)} className="form-col col-md-3">
-						<input 
-						className="form-control m-1" 
-						placeholder="id" 
-						name="id" 
-						ref={register({ required: true })} />
+						<input
+							className="form-control m-1"
+							placeholder="id"
+							name="id"
+							ref={register({ required: true })} />
 						{errors.firstName && "add id"}
 
-						<input 
-						className="form-control m-1" 
-						placeholder="firstName" 
-						name="firstName" 
-						ref={register({ required: true })} />
+						<input
+							className="form-control m-1"
+							placeholder="firstName"
+							name="firstName"
+							ref={register({ required: true })} />
 						{errors.firstName && "add firstName"}
 
-						<input 
-						className="form-control m-1" 
-						placeholder="lastName" 
-						name="lastName" 
-						ref={register({ required: true })} />
+						<input
+							className="form-control m-1"
+							placeholder="lastName"
+							name="lastName"
+							ref={register({ required: true })} />
 						{errors.firstName && "add lastName"}
 
-						<input 
-						className="form-control m-1" 
-						placeholder="email" 
-						name="email" 
-						ref={register({ required: true })} />
+						<input
+							className="form-control m-1"
+							placeholder="email"
+							name="email"
+							ref={register({ required: true })} />
 						{errors.firstName && "add email"}
 
-						<input 
-						className="form-control m-1" 
-						placeholder="phone" 
-						name="phone" 
-						ref={register({ required: true })} />
+						<input
+							className="form-control m-1"
+							placeholder="phone"
+							name="phone"
+							ref={register({ required: true })} />
 						{errors.firstName && "add phone"}
 
 						<input className="btn btn-secondary btn-sm" type="submit" />
 					</form>}
+					
 				<Paginator
 					dataLength={props.tableData.length}
 					pageSize={pageSize}
@@ -144,9 +147,10 @@ export const Table = (props: IProps) => {
 					</tr>
 				</thead>
 				<tbody>
-					{tableData}
+					{tableDataJSX}
 				</tbody>
 			</table>
+			
 			{watchInfoBool &&
 				<div className="col">
 					<div>Выбран пользователь <b>{address.firstName}&nbsp;{address.lastName}</b></div>

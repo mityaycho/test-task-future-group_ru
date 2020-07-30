@@ -9,7 +9,7 @@ type paginatorType = {
 	setPageSize: (e: number) => void;
 	currentPage: number;
 	setCurrentPage: (arg: number) => void;
-}
+};
 
 const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize, currentPage, setCurrentPage }) => {
 
@@ -25,7 +25,7 @@ const Paginator: React.FC<paginatorType> = ({ dataLength, pageSize, setPageSize,
 
 	if (allPages < portionSize) {
 		setPortionSize(allPages);
-	}
+	};
 
 	const pagesData = pages
 		.map(p => {

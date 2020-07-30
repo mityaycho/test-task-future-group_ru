@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 interface IpropsHeader {
 	showTable: string;
 	setShowTable(e: string): void;
-}
+};
 
 const Header = (props: IpropsHeader) => {
 

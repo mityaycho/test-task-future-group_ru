@@ -1,4 +1,13 @@
-import { SET_TABLE_SMALL, SET_TABLE_LARGE, SET_PRELOADER, setTableSmalAC, setTableLargeAC, setPreloaderAC, SET_SORT_DATA, SET_NEW_DATA } from './actions';
+import {
+	SET_TABLE_SMALL,
+	SET_TABLE_LARGE,
+	SET_PRELOADER,
+	SET_SORT_DATA,
+	SET_NEW_DATA,
+	setTableSmalAC,
+	setTableLargeAC,
+	setPreloaderAC
+} from './actions';
 import { Dispatch } from 'redux';
 import { getTableApi } from './../api/getTableApi';
 
@@ -14,19 +23,19 @@ export type IData = {
 		city: string;
 		state: string;
 		zip: string;
-	}
+	};
 	description: string;
 };
 
 export type ITableHead = {
 	th: string;
 	sort: boolean;
-}
+};
 
 export interface ITablePreloader {
 	type: typeof SET_PRELOADER;
 	preloader: boolean;
-}
+};
 
 
 export interface ITableSmall {
@@ -64,7 +73,7 @@ const initialSate = {
 	data: [] as Array<IData>
 };
 
-export type IInitialSatate = typeof initialSate
+export type IInitialSatate = typeof initialSate;
 
 export const tableReducer = (state = initialSate, action: ITableSmall | ITableLarge | ITablePreloader | ISortData | ISetNewData): IInitialSatate => {
 	switch (action.type) {
@@ -96,7 +105,6 @@ export const tableReducer = (state = initialSate, action: ITableSmall | ITableLa
 export const tableDriwingTC = (table: string) => async (dispatch: Dispatch) => {
 	try {
 		if (table === 'Small') {
-
 			dispatch(setPreloaderAC(true));
 			const response = await getTableApi.getTableSmall();
 			dispatch(setTableSmalAC(response, false));
